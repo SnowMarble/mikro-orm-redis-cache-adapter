@@ -1,0 +1,34 @@
+{
+  "compilerOptions": {
+    /* type checking */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "useUnknownInCatchVariables": true,
+
+    /* modules */
+    "baseUrl": "./",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "resolveJsonModule": true,
+    "moduleDetection": "force",
+
+    /* Language and Environment */
+    "lib": ["ESNext", "DOM"],
+    "target": "ESNext",
+
+    /* Interop Constraints */
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": false,
+    "verbatimModuleSyntax": true,
+
+    /* Output Formatting */
+    "noErrorTruncation": true,
+
+    /* Completeness */
+    "skipLibCheck": true
+  },
+  "include": ["src/**/*"]
+}
