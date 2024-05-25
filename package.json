@@ -1,8 +1,8 @@
 {
   "name": "@javien/mikro-orm-redis-cache-adapter",
-  "license": "ISC",
+  "license": "MIT",
   "description": "",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "Javien Lee <kraccoon@dimipay.io> (https://github.com/SnowMarble/)",
   "keywords": ["mikro-orm", "redis", "cache", "adapter"],
   "main": "index.js",
@@ -10,7 +10,7 @@
   "scripts": {
     "check": "biome check src",
     "check:apply": "biome check --apply src",
-    "build": "esbuild  src/redisCacheAdapter.ts --bundle --platform=node --outdir=dist --minify"
+    "build": "rm -rf dist && esbuild  src/redisCacheAdapter.ts --bundle --platform=node --outdir=dist& tsc --emitDeclarationOnly --outdir dist"
   },
   "devDependencies": {
     "@biomejs/biome": "1.7.3",

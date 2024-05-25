@@ -27,6 +27,9 @@
     /* Output Formatting */
     "noErrorTruncation": true,
 
+    /* Emmit */
+    "declaration": true,
+
     /* Completeness */
     "skipLibCheck": true
   },
