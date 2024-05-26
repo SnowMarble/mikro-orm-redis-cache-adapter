@@ -1,9 +1,14 @@
 {
   "name": "@javien/mikro-orm-redis-cache-adapter",
   "license": "MIT",
-  "description": "",
+  "description": "mikro-orm redis cache adapter using v8 serialize",
   "version": "0.0.9",
   "author": "Javien Lee <kraccoon@dimipay.io> (https://github.com/SnowMarble/)",
+  "homepage": "https://github.com/SnowMarble/mikro-orm-redis-cache-adapter",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SnowMarble/mikro-orm-redis-cache-adapter.git"
+  },
   "keywords": [
     "mikro-orm",
     "redis",
@@ -17,7 +22,9 @@
   "scripts": {
     "check": "biome check src",
     "check:apply": "biome check --apply src",
-    "build": "rm -rf dist && esbuild  src/index.ts --bundle --platform=node --outdir=dist& tsc --emitDeclarationOnly --outdir dist"
+    "bundle": "esbuild src/index.ts --bundle --platform=node --outdir=dist --minify-identifiers",
+    "emitDeclarations": "tsc --emitDeclarationOnly --outdir dist",
+    "build": "rm -rf dsit && pnpm bundle && pnpm emitDeclarations"
   },
   "devDependencies": {
     "@biomejs/biome": "1.7.3",
