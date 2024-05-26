@@ -2,6 +2,7 @@ import { Options } from './options'
 import { serialize, deserialize } from 'node:v8'
 
 import type { CacheAdapter } from '@mikro-orm/core'
+import type { RedisCacheAdapterOptions } from './options'
 
 export class RedisCacheAdapter implements CacheAdapter {
   private readonly options: Options
@@ -9,8 +10,10 @@ export class RedisCacheAdapter implements CacheAdapter {
   private readonly serializer = serialize
   private readonly deserializer = deserialize
 
-  constructor(options: Options) {
+  constructor(options: RedisCacheAdapterOptions) {
     this.options = options instanceof Options ? options : new Options(options)
+
+    this.options.logger('Cache adapter initialized.')
   }
 
   async get<T = unknown>(name: string): Promise<T | undefined> {
@@ -52,7 +55,7 @@ export class RedisCacheAdapter implements CacheAdapter {
         this.options.client.set(key, serializedData)
       }
 
-      this.debug('Set', key, serializedData)
+      this.debug('Set', key, data)
     } catch (error) {
       this.options.logger('Failed to store data.')
       this.options.logger(error)
@@ -89,20 +92,25 @@ export class RedisCacheAdapter implements CacheAdapter {
       })
 
       stream.on('end', () => {
-        pipeline.exec((err) => {
-          if (err) {
+        pipeline.exec((error) => {
+          if (error) {
             this.options.logger('Failed to clear data.')
-            this.options.logger(err)
-            return reject(err)
+            this.options.logger(error)
+            return reject(error)
           }
           this.options.logger('Cache has been successfully cleared.')
-          resolve()
+          return resolve()
         })
       })
     })
   }
 
-  close(): void | Promise<void> {}
+  close(): void {
+    if (!this.options.gracefulShutdown) {
+      return
+    }
+    this.options.client.disconnect()
+  }
 
   private debug(method: string, key: string, data: unknown) {
     if (!this.options.debug) {
