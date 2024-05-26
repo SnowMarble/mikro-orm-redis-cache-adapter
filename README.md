@@ -25,25 +25,25 @@ defineConfig({
       prefixDelimiter: ':',
       // (optional) Logger. Defaults to `console.log`.
       logger: myLogger,
-      gracefulShutdown: false
       // (optional) gracefulShutdown: If you want to close the Redis connection by yourself, set it to `false`. Defaults to `true`.
+      gracefulShutdown: false
     } as RedisCacheAdapterOptions
   }
 })
 ```
 
-### Behavior Explained
+## Behavior Explained
 
 - Failing to store cache, it'll log the error regardless of the debug mode.
 - Failing to fetch cache, `undefined` will be returned, which means your data will be loaded from the database.
 - Failing to delete the cache, it'll log the error regardless of the debug mode.
 
-### Debug Mode
+## Debug Mode
 
 If you use debug mode, saving data is shown with `JSON.stringify` applied.
 it doesn't mean `JSON.stringify` is used to serialize the data. It's only for logging purposes.
 
-### Supported Data Types
+## Supported Data Types
 
 `v8.serialize` is compatible with [The structured clone algorithm](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Structured_clone_algorithm), so only [Supported types](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Structured_clone_algorithm#supported_types) are able to get serialized.
 
