@@ -1,0 +1,13 @@
+{
+  "name": "benchmarks",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "benchmark": "^2.1.4",
+    "serialize-javascript": "^6.0.2"
+  }
+}

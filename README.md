@@ -25,7 +25,8 @@ defineConfig({
       prefixDelimiter: ':',
       // (optional) Logger. Defaults to `console.log`.
       logger: myLogger,
-      // (optional) gracefulShutdown: If you want to close the Redis connection by yourself, set it to `false`. Defaults to `true`.
+      // (optional) gracefulShutdown: If you want to close the Redis connection by yourself,
+      // set it to `false`. Defaults to `true`.
       gracefulShutdown: false
     } as RedisCacheAdapterOptions
   }
@@ -70,20 +71,15 @@ but there are several kinds of data that it can't serialize and deserialize - Bi
 JSON.stringify(BigInt(1))
 // Uncaught TypeError: Do not know how to serialize a BigInt
 
-const obj = {}
-obj.obj = obj
-JSON.stringify(obj)
-// Uncaught TypeError: Converting circular structure to JSON
-//     --> starting at object with constructor 'Object'
-//     --- property 'obj' closes the circle
+JSON.stringify(new Date()) // '"2024-05-26T05:39:00.493Z"'
+// serializes to string, so parsed result is different from original
 
 const buf = Buffer.from([0])
-const str = JSON.stringify(buf)
-// '{"type":"Buffer","data":[0]}'
-
-const parsed = JSON.parse(str)
-// { type: 'Buffer', data: [ 0 ] }
-// parsed value is different with original data.
+const str = JSON.stringify(buf) //'{"type":"Buffer","data":[0]}'
+// Buffer.toJSON method is called, so parsed result is different from original
 ```
 
-To solve this, we can pass the [`replacer`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#the_replacer_parameter) parameter. However, I don't think this is the best way to serialize data, while we can choose v8 api.
+To solve this, we can pass the [`replacer`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#the_replacer_parameter) parameter.
+So you might think using `JSON.stringify` with `replacer` is fine.
+
+However, I don't think this is the best way to serialize data, while we can choose v8 api.
