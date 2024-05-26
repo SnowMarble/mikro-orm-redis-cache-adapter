@@ -1,8 +1,8 @@
 {
   "name": "@javien/mikro-orm-redis-cache-adapter",
-  "license": "MIT",
   "description": "mikro-orm redis cache adapter using v8 serialize",
   "version": "0.0.9",
+  "license": "MIT",
   "author": "Javien Lee <kraccoon@dimipay.io> (https://github.com/SnowMarble/)",
   "homepage": "https://github.com/SnowMarble/mikro-orm-redis-cache-adapter",
   "repository": {
@@ -18,13 +18,26 @@
   "main": "dist/index.js",
   "module": "dist/index.js",
   "typings": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "default": "./dist/index.cjs"
+      },
+      "types": "./dist/index.d.ts"
+    }
+  },
   "type": "module",
   "scripts": {
     "check": "biome check src",
     "check:apply": "biome check --apply src",
-    "bundle": "esbuild src/index.ts --bundle --platform=node --outdir=dist --minify-identifiers",
+    "bundle": "esbuild src/index.ts --bundle --platform=node --minify-identifiers",
+    "bundle:cjs": "pnpm bundle --outfile=dist/index.cjs --format=cjs",
+    "bundle:esm": "pnpm bundle --outfile=dist/index.mjs --format=esm",
     "emitDeclarations": "tsc --emitDeclarationOnly --outdir dist",
-    "build": "rm -rf dsit && pnpm bundle && pnpm emitDeclarations"
+    "build": "rm -rf dist && pnpm \"/^bundle:.+$/\" && pnpm emitDeclarations"
   },
   "devDependencies": {
     "@biomejs/biome": "1.7.3",
