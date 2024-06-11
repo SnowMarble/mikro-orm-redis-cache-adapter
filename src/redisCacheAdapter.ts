@@ -34,6 +34,7 @@ export class RedisCacheAdapter implements CacheAdapter {
         const data = await this.options.client.getBuffer(key)
 
         if (!data) {
+          this.debug('Get', key, 'Cache miss')
           return undefined
         }
 
@@ -42,7 +43,11 @@ export class RedisCacheAdapter implements CacheAdapter {
 
       const deserializedData = this.deserializer(cachedData) as T
 
-      this.debug('Get', key, deserializedData)
+      if (this.options.noCacheResultDebug) {
+        this.debug('Get', key, 'Cache hit')
+      } else {
+        this.debug('Get', key, deserializedData)
+      }
 
       return deserializedData
     } catch (error) {

@@ -8,6 +8,11 @@ export class Options {
   readonly debug: boolean = false
 
   /**
+   * If true, only hit or miss events will be logged. Defaults to `false`.
+   */
+  readonly noCacheResultDebug: boolean = false
+
+  /**
    * The prefix for the cache keys. Defaults to `mikro`.
    */
   readonly prefix: string = 'mikro'
