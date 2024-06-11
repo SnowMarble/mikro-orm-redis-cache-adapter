@@ -19,13 +19,28 @@ export class RedisCacheAdapter implements CacheAdapter {
   async get<T = unknown>(name: string): Promise<T | undefined> {
     try {
       const key = this.generateKey(name)
-      const data = await this.options.client.getBuffer(key)
 
-      if (!data) {
-        return undefined
+      let cachedData: Buffer
+
+      if (this.options.base64Encode) {
+        const data = await this.options.client.get(key)
+
+        if (!data) {
+          return undefined
+        }
+
+        cachedData = Buffer.from(data, 'base64')
+      } else {
+        const data = await this.options.client.getBuffer(key)
+
+        if (!data) {
+          return undefined
+        }
+
+        cachedData = data
       }
 
-      const deserializedData = this.deserializer(data) as T
+      const deserializedData = this.deserializer(cachedData) as T
 
       this.debug('Get', key, deserializedData)
 
@@ -47,7 +62,19 @@ export class RedisCacheAdapter implements CacheAdapter {
     try {
       const key = this.generateKey(name)
 
-      const serializedData = this.serializer(data)
+      let serializedData: Buffer | string = this.serializer(data)
+
+      if (this.options.base64Encode) {
+        serializedData = serializedData.toString('base64')
+      }
+
+      if (
+        this.options.maximumCacheBytes > 0 &&
+        this.getBytes(serializedData) > this.options.maximumCacheBytes
+      ) {
+        this.options.logger('Data exceeds maximum cache size.')
+        return
+      }
 
       if (expiration) {
         this.options.client.set(key, serializedData, 'PX', expiration)
@@ -122,5 +149,12 @@ export class RedisCacheAdapter implements CacheAdapter {
 
   private generateKey(name: string) {
     return `${this.options.prefix}:${name}`
+  }
+
+  private getBytes(data: Buffer | string): number {
+    if (Buffer.isBuffer(data)) {
+      return data.byteLength
+    }
+    return Buffer.byteLength(data, 'utf8')
   }
 }

@@ -33,6 +33,16 @@ export class Options {
    */
   readonly gracefulShutdown: boolean = true
 
+  /**
+   * Set maximum cache bytes. Defaults to `-1, which means no limit.
+   */
+  readonly maximumCacheBytes: number = -1
+
+  /**
+   * If true, the cache will be base64 encoded before saving.
+   */
+  readonly base64Encode: boolean = false
+
   constructor(options: RedisCacheAdapterOptions) {
     Object.assign(this, options)
   }
