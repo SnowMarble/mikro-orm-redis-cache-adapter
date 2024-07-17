@@ -1,5 +1,6 @@
 import { Options } from './options'
 import { serialize, deserialize } from 'node:v8'
+import safeStringify from 'fast-safe-stringify'
 
 import type { CacheAdapter } from '@mikro-orm/core'
 import type { RedisCacheAdapterOptions } from './options'
@@ -149,7 +150,7 @@ export class RedisCacheAdapter implements CacheAdapter {
       return
     }
 
-    this.options.logger(`${method} ${key}: ${JSON.stringify(data)}`)
+    this.options.logger(`${method} ${key}: ${safeStringify(data)}`)
   }
 
   private generateKey(name: string) {
