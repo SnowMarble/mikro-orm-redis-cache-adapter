@@ -27,7 +27,11 @@ defineConfig({
       logger: myLogger,
       // (optional) gracefulShutdown: If you want to close the Redis connection by yourself,
       // set it to `false`. Defaults to `true`.
-      gracefulShutdown: false
+      gracefulShutdown: false,
+      // (optional) maximumCacheBytes: The maximum cache size of each key in bytes. Defaults to `-1`.
+      maximumCacheBytes: 1024 * 1024,
+      // (optional) base64Encode: If you want to use base64 encoding, set it to `true`. Defaults to `false`.
+      base64Encode: false
     } as RedisCacheAdapterOptions
   }
 })
@@ -38,11 +42,6 @@ defineConfig({
 - Failing to store cache, it'll log the error regardless of the debug mode.
 - Failing to fetch cache, `undefined` will be returned, which means your data will be loaded from the database.
 - Failing to delete the cache, it'll log the error regardless of the debug mode.
-
-## Debug Mode
-
-If you use debug mode, saving data is shown with `JSON.stringify` applied.
-it doesn't mean `JSON.stringify` is used to serialize the data. It's only for logging purposes.
 
 ## Supported Data Types
 
